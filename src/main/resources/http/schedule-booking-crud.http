@@ -1,0 +1,115 @@
+@baseUrl = http://localhost:8080
+@authToken = REPLACE_WITH_JWT
+
+### Register USER
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "student1",
+  "password": "student-password"
+}
+
+### Login (ADMIN) - username/password in application.properties setzen
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "change-me-please"
+}
+
+### Login (USER)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "student1",
+  "password": "student-password"
+}
+
+### Teacher - Create (ADMIN)
+POST {{baseUrl}}/api/teachers
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Herr Mueller"
+}
+
+### Teacher - Get all (ADMIN)
+GET {{baseUrl}}/api/teachers
+Authorization: Bearer {{authToken}}
+
+### Teacher - Get by id (ADMIN)
+GET {{baseUrl}}/api/teachers/1
+Authorization: Bearer {{authToken}}
+
+### Teacher - Upload profile image (ADMIN)
+PUT {{baseUrl}}/api/teachers/1/profile-image
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=TeacherBoundary
+
+--TeacherBoundary
+Content-Disposition: form-data; name="file"; filename="teacher.jpg"
+Content-Type: image/jpeg
+
+< ./teacher.jpg
+--TeacherBoundary--
+
+### Teacher - Get profile image
+GET {{baseUrl}}/api/teachers/1/profile-image
+Authorization: Bearer {{authToken}}
+
+### Teacher - Update (ADMIN)
+PUT {{baseUrl}}/api/teachers/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Frau Schneider"
+}
+
+### Teacher - Delete (ADMIN)
+DELETE {{baseUrl}}/api/teachers/1
+Authorization: Bearer {{authToken}}
+
+### Schedule Entry - Create (USER/ADMIN)
+POST {{baseUrl}}/api/schedule-entries
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Mathe 8A",
+  "start": "2026-04-08T08:00:00Z",
+  "end": "2026-04-08T08:45:00Z",
+  "color": "#4F46E5",
+  "level": "beginner",
+  "teacherId": 1
+}
+
+### Schedule Entry - Get all (USER/ADMIN)
+GET {{baseUrl}}/api/schedule-entries
+Authorization: Bearer {{authToken}}
+
+### Schedule Entry - Get by id (USER/ADMIN)
+GET {{baseUrl}}/api/schedule-entries/1
+Authorization: Bearer {{authToken}}
+
+### Schedule Entry - Update (USER/ADMIN)
+PUT {{baseUrl}}/api/schedule-entries/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Physik 8A",
+  "start": "2026-04-08T09:00:00Z",
+  "end": "2026-04-08T09:45:00Z",
+  "color": "#10B981",
+  "level": "beginner",
+  "teacherId": 1
+}
+
+### Schedule Entry - Delete (USER/ADMIN)
+DELETE {{baseUrl}}/api/schedule-entries/1
+Authorization: Bearer {{authToken}}
