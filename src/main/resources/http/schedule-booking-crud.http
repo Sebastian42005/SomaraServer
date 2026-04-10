@@ -74,42 +74,71 @@ Content-Type: application/json
 DELETE {{baseUrl}}/api/teachers/1
 Authorization: Bearer {{authToken}}
 
-### Schedule Entry - Create (USER/ADMIN)
-POST {{baseUrl}}/api/schedule-entries
+### Yoga Class - Create (ADMIN)
+POST {{baseUrl}}/api/yoga-classes
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "name": "Mathe 8A",
+  "name": "Vinyasa Flow",
+  "description": "Dynamische Yoga Klasse fuer alle Level",
+  "color": "#4F46E5"
+}
+
+### Yoga Class - Get all
+GET {{baseUrl}}/api/yoga-classes
+Authorization: Bearer {{authToken}}
+
+### Yoga Class - Get colors
+GET {{baseUrl}}/api/yoga-classes/colors
+Authorization: Bearer {{authToken}}
+
+### Yoga Class - Upload image (ADMIN)
+PUT {{baseUrl}}/api/yoga-classes/1/image
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=YogaClassBoundary
+
+--YogaClassBoundary
+Content-Disposition: form-data; name="file"; filename="vinyasa.jpg"
+Content-Type: image/jpeg
+
+< ./vinyasa.jpg
+--YogaClassBoundary--
+
+### Schedule Entry - Create (USER/ADMIN)
+POST {{baseUrl}}/api/timetable-entries
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
   "start": "2026-04-08T08:00:00Z",
   "end": "2026-04-08T08:45:00Z",
-  "color": "#4F46E5",
-  "level": "beginner",
-  "teacherId": 1
+  "level": "BEGINNER",
+  "teacherId": 1,
+  "yogaClassId": 1
 }
 
 ### Schedule Entry - Get all (USER/ADMIN)
-GET {{baseUrl}}/api/schedule-entries
+GET {{baseUrl}}/api/timetable-entries
 Authorization: Bearer {{authToken}}
 
 ### Schedule Entry - Get by id (USER/ADMIN)
-GET {{baseUrl}}/api/schedule-entries/1
+GET {{baseUrl}}/api/timetable-entries/1
 Authorization: Bearer {{authToken}}
 
 ### Schedule Entry - Update (USER/ADMIN)
-PUT {{baseUrl}}/api/schedule-entries/1
+PUT {{baseUrl}}/api/timetable-entries/1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "name": "Physik 8A",
   "start": "2026-04-08T09:00:00Z",
   "end": "2026-04-08T09:45:00Z",
-  "color": "#10B981",
-  "level": "beginner",
-  "teacherId": 1
+  "level": "BEGINNER",
+  "teacherId": 1,
+  "yogaClassId": 1
 }
 
 ### Schedule Entry - Delete (USER/ADMIN)
-DELETE {{baseUrl}}/api/schedule-entries/1
+DELETE {{baseUrl}}/api/timetable-entries/1
 Authorization: Bearer {{authToken}}

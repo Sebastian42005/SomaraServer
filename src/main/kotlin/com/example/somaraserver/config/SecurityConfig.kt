@@ -26,6 +26,7 @@ class SecurityConfig(
     companion object {
         private const val AUTH_ENDPOINT = "/api/auth/**"
         private const val TEACHERS_ENDPOINT = "/api/teachers/**"
+        private const val YOGA_CLASSES_ENDPOINT = "/api/yoga-classes/**"
         private const val TIMETABLE_ENTRIES_ENDPOINT = "/api/timetable-entries/**"
         private val WRITE_METHODS = arrayOf(HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)
     }
@@ -46,12 +47,16 @@ class SecurityConfig(
             .formLogin { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 auth.requestMatchers(AUTH_ENDPOINT).permitAll()
 
                 auth.requestMatchers(HttpMethod.GET, TEACHERS_ENDPOINT).permitAll()
                 WRITE_METHODS.forEach {
                     auth.requestMatchers(it, TEACHERS_ENDPOINT).hasRole("ADMIN")
+                }
+
+                auth.requestMatchers(HttpMethod.GET, YOGA_CLASSES_ENDPOINT).permitAll()
+                WRITE_METHODS.forEach {
+                    auth.requestMatchers(it, YOGA_CLASSES_ENDPOINT).hasRole("ADMIN")
                 }
 
                 auth.requestMatchers(HttpMethod.GET, TIMETABLE_ENTRIES_ENDPOINT).permitAll()

@@ -2,55 +2,47 @@ package com.example.somaraserver.schedule
 
 import com.example.somaraserver.teacher.TeacherResponseDto
 import com.example.somaraserver.teacher.toTeacherResponseDto
-import jakarta.validation.constraints.NotBlank
+import com.example.somaraserver.yogaclass.YogaClassResponseDto
+import com.example.somaraserver.yogaclass.toYogaClassResponseDto
 import jakarta.validation.constraints.NotNull
 import java.time.Instant
 
 data class TimetableEntryRequestDto(
-    @field:NotBlank(message = "name darf nicht leer sein")
-    val name: String,
-
     @field:NotNull(message = "start darf nicht null sein")
     val start: Instant?,
 
     @field:NotNull(message = "end darf nicht null sein")
     val end: Instant?,
 
-    @field:NotBlank(message = "color darf nicht leer sein")
-    val color: String,
-
     val level: Level,
 
     @field:NotNull(message = "teacherId darf nicht null sein")
-    val teacherId: Long?
+    val teacherId: Long?,
+
+    @field:NotNull(message = "yogaClassId darf nicht null sein")
+    val yogaClassId: Long?
 )
 
 data class TimetableEntryResponseDto(
     val id: Long,
-    val name: String,
     val start: Instant,
     val end: Instant,
-    val color: String,
     val level: Level,
-    val teacher: TeacherResponseDto
-)
-
-data class TimetableEntryColorDto(
-    val name: String,
-    val colorHex: String
+    val teacher: TeacherResponseDto,
+    val yogaClass: YogaClassResponseDto
 )
 
 fun TimetableEntry.toTimetableEntryResponseDto(): TimetableEntryResponseDto {
     val persistedId = requireNotNull(id) { "TimetableEntry id darf nicht null sein" }
     val teacherEntity = requireNotNull(teacher) { "Teacher darf nicht null sein" }
+    val yogaClassEntity = requireNotNull(yogaClass) { "YogaClass darf nicht null sein" }
 
     return TimetableEntryResponseDto(
         id = persistedId,
-        name = name,
         start = start,
         end = end,
-        color = color,
         level = level,
-        teacher = teacherEntity.toTeacherResponseDto()
+        teacher = teacherEntity.toTeacherResponseDto(),
+        yogaClass = yogaClassEntity.toYogaClassResponseDto()
     )
 }

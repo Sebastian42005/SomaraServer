@@ -1,6 +1,7 @@
 package com.example.somaraserver.schedule
 
 import com.example.somaraserver.teacher.TeacherService
+import com.example.somaraserver.yogaclass.YogaClassService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -9,7 +10,8 @@ import java.time.Instant
 @Service
 class TimetableEntryService(
     private val timetableEntryRepository: TimetableEntryRepository,
-    private val teacherService: TeacherService
+    private val teacherService: TeacherService,
+    private val yogaClassService: YogaClassService
 ) {
     fun getAll(): List<TimetableEntryResponseDto> =
         timetableEntryRepository.findAll().map(TimetableEntry::toTimetableEntryResponseDto)
@@ -23,13 +25,13 @@ class TimetableEntryService(
         validateDates(start, end)
 
         val teacher = teacherService.findEntityById(requireNotNull(request.teacherId))
+        val yogaClass = yogaClassService.findEntityById(requireNotNull(request.yogaClassId))
         val entry = TimetableEntry(
-            name = request.name.trim(),
             start = start,
             end = end,
-            color = request.color.trim(),
             level = request.level,
-            teacher = teacher
+            teacher = teacher,
+            yogaClass = yogaClass
         )
 
         return timetableEntryRepository.save(entry).toTimetableEntryResponseDto()
@@ -41,14 +43,14 @@ class TimetableEntryService(
         validateDates(start, end)
 
         val teacher = teacherService.findEntityById(requireNotNull(request.teacherId))
+        val yogaClass = yogaClassService.findEntityById(requireNotNull(request.yogaClassId))
         val existing = findEntityById(id)
 
-        existing.name = request.name.trim()
         existing.start = start
         existing.end = end
-        existing.color = request.color.trim()
         existing.level = request.level
         existing.teacher = teacher
+        existing.yogaClass = yogaClass
 
         return timetableEntryRepository.save(existing).toTimetableEntryResponseDto()
     }
@@ -57,14 +59,6 @@ class TimetableEntryService(
         val existing = findEntityById(id)
         timetableEntryRepository.delete(existing)
     }
-
-    fun getUsedColors(): List<TimetableEntryColorDto> =
-        timetableEntryRepository.findAllEntryColors().map { projection ->
-            TimetableEntryColorDto(
-                name = projection.name,
-                colorHex = projection.color
-            )
-        }
 
     private fun findEntityById(id: Long): TimetableEntry =
         timetableEntryRepository.findById(id).orElseThrow {

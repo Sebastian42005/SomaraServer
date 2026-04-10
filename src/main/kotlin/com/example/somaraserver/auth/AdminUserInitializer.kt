@@ -24,13 +24,7 @@ class AdminUserInitializer(
             return
         }
 
-        val existingUser = appUserRepository.findByUsername(username).orElse(null)
-        if (existingUser != null) {
-            if (existingUser.role != UserRole.ADMIN) {
-                existingUser.role = UserRole.ADMIN
-                appUserRepository.save(existingUser)
-                log.info("Bestehender User '{}' wurde auf Rolle ADMIN gesetzt", username)
-            }
+        if (appUserRepository.existsByUsername(username)) {
             return
         }
 
