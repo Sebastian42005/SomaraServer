@@ -24,5 +24,11 @@ class AppUser(
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    var role: UserRole = UserRole.USER
+    var role: UserRole = UserRole.USER,
+
+    @Column(name = "profile_image_content_type")
+    var profileImageContentType: String? = null,
+
+    @Column(name = "profile_image_content")
+    var profileImageContent: ByteArray? = null
 )

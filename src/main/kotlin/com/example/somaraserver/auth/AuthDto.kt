@@ -21,5 +21,6 @@ data class LoginRequestDto(
 data class AuthResponseDto(
     val token: String,
     val username: String,
-    val role: UserRole
+    val role: UserRole,
+    val hasProfileImage: Boolean
 )

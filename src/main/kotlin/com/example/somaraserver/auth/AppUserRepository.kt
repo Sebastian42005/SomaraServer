@@ -7,4 +7,8 @@ interface AppUserRepository : JpaRepository<AppUser, Long> {
     fun findByUsername(username: String): Optional<AppUser>
 
     fun existsByUsername(username: String): Boolean
+
+    fun findAllByOrderByIdAsc(): List<AppUser>
+
+    fun countByRole(role: UserRole): Long
 }

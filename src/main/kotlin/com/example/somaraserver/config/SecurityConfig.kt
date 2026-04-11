@@ -28,6 +28,7 @@ class SecurityConfig(
         private const val TEACHERS_ENDPOINT = "/api/teachers/**"
         private const val YOGA_CLASSES_ENDPOINT = "/api/yoga-classes/**"
         private const val TIMETABLE_ENTRIES_ENDPOINT = "/api/timetable-entries/**"
+        private const val USERS_ENDPOINT = "/api/users/**"
         private val WRITE_METHODS = arrayOf(HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)
     }
 
@@ -63,6 +64,10 @@ class SecurityConfig(
                 WRITE_METHODS.forEach {
                     auth.requestMatchers(it, TIMETABLE_ENTRIES_ENDPOINT).hasAnyRole("TEACHER", "ADMIN")
                 }
+
+                auth.requestMatchers(HttpMethod.GET, "/api/users/me", "/api/users/me/profile-image").authenticated()
+                auth.requestMatchers(HttpMethod.GET, "/api/users/*/profile-image").authenticated()
+                auth.requestMatchers(USERS_ENDPOINT).hasRole("ADMIN")
 
                 auth.anyRequest().authenticated()
             }

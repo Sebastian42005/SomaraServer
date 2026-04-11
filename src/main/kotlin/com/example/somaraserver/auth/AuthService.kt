@@ -33,7 +33,8 @@ class AuthService(
         return AuthResponseDto(
             token = token,
             username = savedUser.username,
-            role = savedUser.role
+            role = savedUser.role,
+            hasProfileImage = savedUser.profileImageContent != null
         )
     }
 
@@ -50,7 +51,8 @@ class AuthService(
         return AuthResponseDto(
             token = token,
             username = user.username,
-            role = user.role
+            role = user.role,
+            hasProfileImage = user.profileImageContent != null
         )
     }
 }
